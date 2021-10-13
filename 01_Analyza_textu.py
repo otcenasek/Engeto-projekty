@@ -41,29 +41,40 @@ separator = '-' *50
 platne_volby = {1,2,3}
 print(separator)
 name = str(input('username:'))
+if name not in users.keys():
+    print('neplatne jmeno uzivatele')
+    quit()
 password = str(input('password:'))
 print (separator)
+
+#testuje shodu hesel
 if users[name] == password:
     print ('Wellcome to the app {} \nWe have {} text to be analyzed'.format(name.capitalize(),3))
     print (separator)
 else:
+    print('Spatne heslo')
     quit()
 vyber = input('Enter a number btw. {} and {} to select: '.format(1,3))
+
+#testuje, zda je vyber cislo
 if str(vyber).isnumeric() == False:
     print('Nebylo zadane cislo')
     quit()
-vyber = int(vyber)-1
-if vyber not in range(3):
+vyber = int(vyber)
+
+#testuje, zda je vyber platny
+if vyber not in platne_volby:
     print('input out of range')
     quit()
 
 print (separator)
-# ziska list slov, rozdeli text v miostech mezer, odstrani nezadouci znaky
-slova = [slovo.strip('\n.') for slovo in TEXTS[vyber].split(' ')]
+# ziska list slov, rozdeli text v mistech mezer, odstrani nezadouci znaky
+slova = [slovo.strip('\n.') for slovo in TEXTS[vyber-1].split(' ')]
 
-#slova.remove('')                                                                                                                                       
+#slova.remove('')  odstrani prazdna slova                                                                                                                                     
 slova = [slovo for slovo in slova if slovo]
 
+#tiskne pocet slov v textu
 print('There are {}  words ion the selected text'.format(len(slova)))
 
 # ziska seznam slov s velkym pismenem naprvnim miste
@@ -89,26 +100,29 @@ for i in pocet_cisel:
 print ('The sum of all the numbers ', soucet)
 print(separator)
 
-#nejdelsi_slovo = ''
-
+#do slovniku "cetnost" priradi jako klice delku slova a pocita jeji vyskyt mezi slovy
 cetnost = {}
 for slovo in slova:
     if str(len(slovo)) in cetnost.keys():
         cetnost[str(len(slovo))] +=1
     else:
         cetnost[str(len(slovo))] = 1
-
-        
+      
 print(separator)
 print('LEN|  OCCURENCES    |NR.')
 print (separator)
-for i in sorted(cetnost):
-    print ('{:3}|{:16}|{}'.format(i, (int(i)*'*'), cetnost[i]))
 
+#vezme klic slovniku "cetnost", pomoci lambda funkce ho prevede na int a setridi pomoci sorted.
+#vysledkem je list of tuples
+serazene_cetnost = sorted(cetnost.items(), key = lambda x: int(x[0]))
+
+#vytiskne seznam tuplu
+for i, x in serazene_cetnost:
+    print ('{:3}|{:16}|{}'.format(i, (int(x)*'*'), x))
     
+#nedari se mi parametricky ridit sirku sloupce s hvezdickami...
     
-#    if len(nejdelsi_slovo) < len(slovo):
-#       nejdelsi_slovo = slovo
+
 
 
 
